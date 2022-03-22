@@ -7,12 +7,15 @@ HigherLower is a Discord Bot that allows us to play the classic guesssing game o
 - Clone the repository to your machine.
 - Open terminal in that folder
 - Use the package manager [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) to install the required packages.
-
+- Run following commands
 ```bash
 npm install
+node register.js
+node index.js
 ```
 
 ## Commands
+
 | `/youtubers`  | Higher Lower about YouTube Subscribers |
 |---------------|----------------------------------------|
 | `/richpeople` | Higher Lower about Rich People         |
