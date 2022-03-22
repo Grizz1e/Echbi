@@ -14,11 +14,11 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('youtubers')
-        .setDescription('Starts a game of Higher Lower with Youtuber\'s subscriber count'),
+        .setName('richpeople')
+        .setDescription('Starts a game of Higher Lower about Richest People'),
     async execute(interaction, client) {
 
-        let channels = await getArray('youtubers');
+        let channels = await getArray('richpeople');
         shuffleArray(channels);
         let i = 0,
             winCount = 0,
@@ -37,8 +37,8 @@ module.exports = {
         ]
         let embed = new MessageEmbed()
             .setAuthor({
-                name: "Higher Lower - YouTube Subscribers",
-                iconURL: "https://logo-logos.com/wp-content/uploads/2016/11/YouTube_icon_logo.png"
+                name: "Higher Lower - Rich People",
+                iconURL: "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/310/money-bag_1f4b0.png"
             })
             .setTitle("__" + channel1 + "__ VS __" + channel2 + "__")
             .setDescription("```\n" + makeTable(data) + "\n```\n\n**Total Score:** `" + winCount + "`")
@@ -109,5 +109,6 @@ module.exports = {
                 return
             }
         }
+        
     }
 }
