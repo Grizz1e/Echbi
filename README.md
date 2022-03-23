@@ -16,10 +16,13 @@ node index.js
 
 ## Commands
 
-| `/youtubers`  | Higher Lower about YouTube Subscribers |
+| Commands      | Description                            |
 |---------------|----------------------------------------|
+| `/youtubers`  | Higher Lower about YouTube Subscribers |
 | `/richpeople` | Higher Lower about Rich People         |
 | `/help`       | Shows help menu                        |
+| `cards`       | Higher Lower with a Deck of Cards      |
+| `countrysize` | Higher Lower about country size        |
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

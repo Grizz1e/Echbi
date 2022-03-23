@@ -11,6 +11,7 @@ const {
     shortInt,
     makeTable
 } = require('../Utils/functions')
+const categories = require('../Utils/categories')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,7 +19,7 @@ module.exports = {
         .setDescription('Starts a game of Higher Lower about Richest People'),
     async execute(interaction, client) {
 
-        let channels = await getArray('richpeople');
+        let channels = await categories.richpeople();
         shuffleArray(channels);
         let i = 0,
             winCount = 0,
@@ -32,10 +33,12 @@ module.exports = {
         let data = [
             [channel1, channel2],
             ["", ""],
-            [shortInt(subs1), "?"],
+            [subs1.toLocaleString() + "€", "?"],
+            ["Assets", "\u200b"],
             ["", ""]
         ]
         let embed = new MessageEmbed()
+            .setColor("#3423A6")
             .setAuthor({
                 name: "Higher Lower - Rich People",
                 iconURL: "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/310/money-bag_1f4b0.png"
@@ -46,7 +49,7 @@ module.exports = {
             .setImage(thumb2)
         interaction.reply({
             embeds: [embed],
-            components: hlButton()
+            components: [hlButton(false)]
         })
         if (subs1 > subs2) {
             correct = 0;
@@ -66,7 +69,8 @@ module.exports = {
             data = [
                 [channel1, channel2],
                 ["", ""],
-                [shortInt(subs1), "?"],
+                [subs1.toLocaleString() + "€", "?"],
+                ["Assets", "\u200b"],
                 ["", ""]
             ]
             winCount++;
@@ -81,6 +85,7 @@ module.exports = {
                     if ((cmp.customId === 'higher' && correct > 0) || (cmp.customId === 'lower' && correct < 1) || (cmp.customId === 'higher' && correct > 1) || (cmp.customId === 'lower' && correct > 1)) {
                         embed.setTitle("__" + channel1 + "__ VS __" + channel2 + "__")
                             .setDescription("```\n" + makeTable(data) + "\n```\n\n**Total Score:** `" + winCount + "`")
+                            .setColor(cmp.customId === 'higher' ? "#DA172F" : "#3423A6")
                             .setThumbnail(thumb1)
                             .setImage(thumb2)
                         if (subs1 > subs2) {
@@ -94,12 +99,12 @@ module.exports = {
                             embeds: [embed]
                         })
                     } else {
-                        embed.setDescription("**Wrong Answer!!**\n" + embed.description.replace("?", shortInt(subs1)))
+                        embed.setDescription("**Wrong Answer!!**\n" + embed.description.replace("?", subs1.toLocaleString() + "€").replace("\u200b", "Assets"))
                             .setThumbnail(interaction.user.displayAvatarURL())
                             .setImage("https://www.tomscott.com/quietcarriage/wrong.png")
                         cmp.update({
                             embeds: [embed],
-                            components: []
+                            components: [hlButton(true)]
                         })
                     }
 
@@ -109,6 +114,6 @@ module.exports = {
                 return
             }
         }
-        
+
     }
 }

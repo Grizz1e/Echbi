@@ -7,18 +7,17 @@ const {
 const {
     shuffleArray,
     hlButton,
-    shortInt,
     makeTable
 } = require('../Utils/functions')
 const categories = require('../Utils/categories')
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('youtubers')
-        .setDescription('Starts a game of Higher Lower with Youtuber\'s subscriber count'),
+        .setName('countrysize')
+        .setDescription('Starts a game of Higher Lower about Size of Countries'),
     async execute(interaction, client) {
 
-        let channels = await categories.youtubers();
+        let channels = await categories.countrysize();
         shuffleArray(channels);
         let i = 0,
             winCount = 0,
@@ -27,18 +26,19 @@ module.exports = {
             channel2 = channels[i + 1][0],
             subs1 = parseInt(channels[i][1]),
             subs2 = parseInt(channels[i + 1][1]),
-            thumb1 = channels[i][2],
-            thumb2 = channels[i + 1][2]
+            thumb1 = "https://raw.githubusercontent.com/hampusborgos/country-flags/main/png1000px/" + channels[i][2].split(".sv")[0].slice(-2) + ".png",
+            thumb2 = "https://raw.githubusercontent.com/hampusborgos/country-flags/main/png1000px/" + channels[i + 1][2].split(".sv")[0].slice(-2) + ".png"
         let data = [
             [channel1, channel2],
             ["", ""],
-            [shortInt(subs1), "?"],
+            [subs1.toLocaleString() + " Km²", "?"],
             ["", ""]
         ]
         let embed = new MessageEmbed()
+            .setColor("#3423A6")
             .setAuthor({
-                name: "Higher Lower - YouTube Subscribers",
-                iconURL: "https://logo-logos.com/wp-content/uploads/2016/11/YouTube_icon_logo.png"
+                name: "Higher Lower - Country Size",
+                iconURL: "https://www.worldlandtrust.org/wp-content/uploads/2018/04/globe-icon-300x300.png"
             })
             .setTitle("__" + channel1 + "__ VS __" + channel2 + "__")
             .setDescription("```\n" + makeTable(data) + "\n```\n\n**Total Score:** `" + winCount + "`")
@@ -46,7 +46,7 @@ module.exports = {
             .setImage(thumb2)
         interaction.reply({
             embeds: [embed],
-            components: [hlButton(false)]
+            components: [hlButton(false, false)]
         })
         if (subs1 > subs2) {
             correct = 0;
@@ -61,12 +61,12 @@ module.exports = {
                 channel2 = channels[i + 1][0],
                 subs1 = parseInt(channels[i][1]),
                 subs2 = parseInt(channels[i + 1][1]),
-                thumb1 = channels[i][2],
-                thumb2 = channels[i + 1][2]
+                thumb1 = "https://raw.githubusercontent.com/hampusborgos/country-flags/main/png1000px/" + channels[i][2].split(".sv")[0].slice(-2) + ".png",
+                thumb2 = "https://raw.githubusercontent.com/hampusborgos/country-flags/main/png1000px/" + channels[i + 1][2].split(".sv")[0].slice(-2) + ".png"
             data = [
                 [channel1, channel2],
                 ["", ""],
-                [shortInt(subs1), "?"],
+                [subs1.toLocaleString() + " Km²", "?"],
                 ["", ""]
             ]
             winCount++;
@@ -81,6 +81,7 @@ module.exports = {
                     if ((cmp.customId === 'higher' && correct > 0) || (cmp.customId === 'lower' && correct < 1) || (cmp.customId === 'higher' && correct > 1) || (cmp.customId === 'lower' && correct > 1)) {
                         embed.setTitle("__" + channel1 + "__ VS __" + channel2 + "__")
                             .setDescription("```\n" + makeTable(data) + "\n```\n\n**Total Score:** `" + winCount + "`")
+                            .setColor(cmp.customId === 'higher' ? "#DA172F" : "#3423A6")
                             .setThumbnail(thumb1)
                             .setImage(thumb2)
                         if (subs1 > subs2) {
@@ -94,22 +95,21 @@ module.exports = {
                             embeds: [embed]
                         })
                     } else {
-                        embed.setDescription("**Wrong Answer!!**\n" + embed.description.replace("?", shortInt(subs1)))
+                        embed.setDescription("**Wrong Answer!!**\n" + embed.description.replace("?", subs1.toLocaleString() + " Km²"))
                             .setThumbnail(interaction.user.displayAvatarURL())
                             .setImage("https://www.tomscott.com/quietcarriage/wrong.png")
                         cmp.update({
                             embeds: [embed],
-                            components: [hlButton(true)]
+                            components: [hlButton(true, false)]
                         })
                     }
 
                 }
                 i++;
             } catch (err) {
-                return cmp.update({
-                    components: [hlButton(true)]
-                })
+                return
             }
         }
+
     }
 }
